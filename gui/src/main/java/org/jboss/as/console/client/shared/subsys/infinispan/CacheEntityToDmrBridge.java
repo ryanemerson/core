@@ -255,6 +255,11 @@ public class CacheEntityToDmrBridge<T extends LocalCache> extends EntityToDmrBri
                 } else {
                     writeSingletonAttributeStep.get(VALUE).set(changedValues.get(javaName).toString());
                 }
+            } else {
+                if (singletonName.equals("eviction") && javaName.equals("maxEntries")
+                        && !changedValues.get("evictionStrategy").equals("NONE")) {
+                    writeSingletonAttributeStep.get(VALUE).set("10000");
+                }
             }
             stepsList.add(writeSingletonAttributeStep);
         }

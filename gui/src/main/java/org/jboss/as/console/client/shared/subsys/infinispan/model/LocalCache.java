@@ -233,7 +233,7 @@ public interface LocalCache extends NamedEntity {
     @Binding(detypedName="eviction/EVICTION/max-entries")
     @FormItem(defaultValue="10000",
             label="Max Entries",
-            required=true,
+            required=false,
             formItemTypeForEdit="NUMBER_BOX",
             formItemTypeForAdd="NUMBER_BOX",
             localTabName ="subsys_infinispan_eviction")
