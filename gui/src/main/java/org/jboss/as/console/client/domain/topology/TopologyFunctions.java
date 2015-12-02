@@ -87,7 +87,8 @@ public final class TopologyFunctions {
                             ModelNode groupModel = property.getValue();
                             String profile = groupModel.get("profile").asString();
                             String socketBindingGroup = groupModel.get("socket-binding-group").asString();
-                            ServerGroup serverGroup = new ServerGroup(name, profile, socketBindingGroup);
+                            int groupOffset = Integer.parseInt(groupModel.get("socket-binding-port-offset").asString());
+                            ServerGroup serverGroup = new ServerGroup(name, profile, socketBindingGroup, groupOffset);
                             groups.put(name, serverGroup);
                         }
                     }
@@ -157,9 +158,15 @@ public final class TopologyFunctions {
 
                                 // FIXME We just need the socket binding group name here not the actual socket bindings
                                 // Using a map is not necessary
+
+                                // HAL-993: Necessary to respect server-group offset
+                                Map<String, ServerGroup> serverGroupMap = control.getContext().get(GROUPS_KEY);
+                                int hostOffset = scModel.get("socket-binding-port-offset").asInt();
+                                int sgOffset = serverGroupMap.get(groupName).getGroupPortOffset();
+                                Integer offset = hostOffset == 0 ? sgOffset : hostOffset;
+
                                 Map<String, String> socketBindings = new HashMap<>();
-                                socketBindings.put(group.getSocketBindingGroup(),
-                                        scModel.get("socket-binding-port-offset").asString());
+                                socketBindings.put(group.getSocketBindingGroup(), offset.toString());
                                 serverInstance.setSocketBindings(socketBindings);
                                 servers.add(serverInstance);
                             }

@@ -37,8 +37,14 @@ class ServerGroup implements Comparable<ServerGroup>
     final String socketBindingGroup;
     String cssClassname;
     int maxServersPerHost;
+    int groupPortOffset;
     SortedMap<HostInfo, List<ServerInstance>> serversPerHost;
 
+
+    ServerGroup(final String name, final String profile, final String socketBindingGroup, final int groupPortOffset) {
+        this(name, profile, socketBindingGroup);
+        this.groupPortOffset = groupPortOffset;
+    }
 
     ServerGroup(final String name, final String profile, final String socketBindingGroup)
     {
@@ -121,5 +127,9 @@ class ServerGroup implements Comparable<ServerGroup>
 
     public String getSocketBindingGroup() {
         return socketBindingGroup;
+    }
+
+    public int getGroupPortOffset() {
+        return groupPortOffset;
     }
 }
